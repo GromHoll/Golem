@@ -9,11 +9,7 @@ public class Color implements Colored {
     private int rgb;
 
     public Color(int red, int green, int blue) {
-        validateColorValueRange(red, green, blue);
-        rgb = 0xFF000000 |
-            ((red   & 0xFF) << 16) |
-            ((green & 0xFF) << 8 ) |
-             (blue  & 0xFF);
+        setRGB(red, green, blue);
     }
 
     public Color(int rgb) {
@@ -27,6 +23,14 @@ public class Color implements Colored {
 
     public void setRGB(int rgb) {
         this.rgb = 0xFF000000 | rgb;
+    }
+
+    public void setRGB(int red, int green, int blue) {
+        validateColorValueRange(red, green, blue);
+        rgb = 0xFF000000 |
+            ((red   & 0xFF) << 16) |
+            ((green & 0xFF) << 8 ) |
+            (blue  & 0xFF);
     }
 
     public final Color copy() {

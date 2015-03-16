@@ -14,7 +14,7 @@ public class Main {
     public static void main(String[] args) {
 
         JFrame frame = new JFrame();
-        TerminalPanel panel = new TerminalPanel(10, 10);
+        TerminalPanel panel = new TerminalPanel(30, 30);
         frame.add(panel);
         frame.pack();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -48,15 +48,57 @@ public class Main {
 //        panel.printCharacter(3, 1, 'B');
 
         Random r = new Random();
+
+        int currentR = r.nextInt(256);
+        int currentG = r.nextInt(256);
+        int currentB = r.nextInt(256);
+
+        int targetR = r.nextInt(256);
+        int targetG = r.nextInt(256);
+        int targetB = r.nextInt(256);
+        Color color = new Color(currentR, currentG, currentB);
+
+        long timeBefore = System.nanoTime();
+        long timeAfter;
+        long timeDelta;
+
         while (true) {
-            Color color = new Color(r.nextInt());
-            System.out.println("New color " + color.getRGB());
+            if (currentR == targetR) {
+                targetR = r.nextInt(256);
+            } else {
+                currentR += (currentR < targetR) ? 1 : -1;
+            }
+            if (currentG == targetG) {
+                targetG = r.nextInt(256);
+            } else {
+                currentG += (currentG < targetG) ? 1 : -1;
+            }
+            if (currentB == targetB) {
+                targetB = r.nextInt(256);
+            } else {
+                currentB += (currentB < targetB) ? 1 : -1;
+            }
+
+            color.setRGB(currentR, currentG, currentB);
+
             for (int x = 0; x < panel.getWidthInChars(); x++) {
                 for (int y = 0; y < panel.getHeightInChars(); y++) {
-                    panel.setBackground(x, y, color);
+                    panel.setForeground(x, y, color);
+                    panel.printCharacter(x, y, '.');
                 }
             }
             panel.flush();
+
+            try {
+                Thread.sleep(1000/70);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            timeAfter = System.nanoTime();
+            timeDelta = timeAfter - timeBefore;
+            System.out.println("FPS = " + (timeDelta == 0 ? "NaN" : (1000000000 / timeDelta)));
+            timeBefore = timeAfter;
         }
 
 
