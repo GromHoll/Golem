@@ -3,12 +3,11 @@ package org.golem.gui;
 import lombok.Getter;
 import org.golem.graphics.Colored;
 import org.golem.graphics.Colors;
+import org.golem.terminal.Terminal;
 import org.golem.terminal.TerminalBuffer;
 import org.golem.terminal.TerminalCell;
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferInt;
 
@@ -30,7 +29,7 @@ public class TerminalPanel extends Component implements Terminal {
     @Getter
     private boolean flushed = true;
 
-    private TerminalBuffer buffer;
+    private final TerminalBuffer buffer;
 
     private final BufferedImage bufferedImage;
     private final Bitmap bitmap;
@@ -47,46 +46,66 @@ public class TerminalPanel extends Component implements Terminal {
 
     @Override
     public void printCharacter(int x, int y, char symbol) {
-        buffer.setCharacter(x, y, symbol);
+        synchronized (buffer) {
+            buffer.setCharacter(x, y, symbol);
+        }
     }
 
     @Override
     public void setBackground(int x, int y, Colored color) {
-        buffer.setBackground(x, y, color);
+        synchronized (buffer) {
+            buffer.setBackground(x, y, color);
+        }
     }
 
     @Override
     public void setForeground(int x, int y, Colored color) {
-        buffer.setForeground(x, y, color);
+        synchronized (buffer) {
+            buffer.setForeground(x, y, color);
+        }
     }
 
     @Override
     public void flush() {
-        if (buffer.isChanged()) {
-            for (int x = 0; x < buffer.getWidth(); x++) {
-                for (int y = 0; y < buffer.getHeight(); y++) {
-                    TerminalCell cell = buffer.getCell(x, y);
-                    if (cell.isChanged()) {
-                        bitmap.drawRect(x*DEFAULT_CELL_SIZE, y*DEFAULT_CELL_SIZE,
-                                        DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE,
-                                        cell.getBackground());
-                    }
-                }
-            }
-            flushed = true;
-        }
+        flushed = true;
+        repaint();
     }
-
 
     @Override
     public void paint(Graphics g) {
         if (flushed) {
-            if (buffer.isChanged()) {
-                g.drawImage(bufferedImage, 0, 0, null);
+            synchronized (buffer) {
+                if (buffer.isChanged()) {
+
+                    for (int x = 0; x < buffer.getWidth(); x++) {
+                        for (int y = 0; y < buffer.getHeight(); y++) {
+                            TerminalCell cell = buffer.getCell(x, y);
+                            if (cell.isChanged()) {
+                                bitmap.drawRect(x*DEFAULT_CELL_SIZE, y*DEFAULT_CELL_SIZE,
+                                        DEFAULT_CELL_SIZE, DEFAULT_CELL_SIZE,
+                                        cell.getBackground());
+                            }
+                        }
+                    }
+
+                    g.drawImage(bufferedImage, 0, 0, null);
+
+                    // TODO add font support to bitmap (or don't use bitmap
+                    for (int x = 0; x < buffer.getWidth(); x++) {
+                        for (int y = 0; y < buffer.getHeight(); y++) {
+                            TerminalCell cell = buffer.getCell(x, y);
+                            g.setColor(new Color(cell.getForeground().getRGB()));
+                            String symbol = String.valueOf(cell.getCharacter());
+                            g.setFont(new Font("default", Font.BOLD, 16));
+                            g.drawString(symbol, x*DEFAULT_CELL_SIZE + 5, (1+y)*DEFAULT_CELL_SIZE - 5);
+                        }
+                    }
+                }
+                buffer.reset();
             }
-            buffer.reset();
             flushed = false;
         }
+        g.dispose();
     }
 
 }

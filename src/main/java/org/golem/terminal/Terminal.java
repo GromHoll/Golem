@@ -1,4 +1,4 @@
-package org.golem.gui;
+package org.golem.terminal;
 
 import org.golem.graphics.Colored;
 
@@ -9,6 +9,7 @@ import org.golem.graphics.Colored;
 // TODO Rename
 public interface Terminal {
 
+    // TODO Rename method
     public int getWidthInChars();
     public int getHeightInChars();
 
