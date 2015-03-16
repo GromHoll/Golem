@@ -1,6 +1,5 @@
 package org.golem.ui;
 
-import lombok.AccessLevel;
 import lombok.Getter;
 
 /**
@@ -9,8 +8,7 @@ import lombok.Getter;
  */
 public abstract class Changeable {
 
-    // TODO Delete AccessLevel after fix lombok plugin
-    @Getter(AccessLevel.PUBLIC)
+    @Getter
     protected boolean changed = true;
 
     protected void reset() {
