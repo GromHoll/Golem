@@ -1,10 +1,10 @@
-package org.golem;
+package org.golem.graphics;
 
 /**
  * @author GromHoll
  * @since 13.03.2015
  */
-public enum Colors implements Colorable {
+public enum Colors implements Colored {
 
     WHITE     (255, 255, 255),
     LIGHTGRAY (192, 192, 192),

@@ -1,8 +1,10 @@
-package org.golem.ui;
+package org.golem.gui;
 
 import lombok.Getter;
-import org.golem.Colorable;
-import org.golem.Colors;
+import org.golem.graphics.Colored;
+import org.golem.graphics.Colors;
+import org.golem.terminal.TerminalBuffer;
+import org.golem.terminal.TerminalCell;
 
 import java.awt.Component;
 import java.awt.Dimension;
@@ -15,7 +17,7 @@ import java.awt.image.DataBufferInt;
  * @since 13.03.2015
  */
 // TODO needs synchronizations
-public class GolemPanel extends Component implements IGolemPanel {
+public class TerminalPanel extends Component implements Terminal {
 
     public static final int DEFAULT_CELL_SIZE = 20;
 
@@ -33,7 +35,7 @@ public class GolemPanel extends Component implements IGolemPanel {
     private final BufferedImage bufferedImage;
     private final Bitmap bitmap;
 
-    public GolemPanel(int widthInChars, int heightInChars) {
+    public TerminalPanel(int widthInChars, int heightInChars) {
         this.widthInChars = widthInChars;
         this.heightInChars = heightInChars;
         this.buffer = new TerminalBuffer(widthInChars, heightInChars);
@@ -49,12 +51,12 @@ public class GolemPanel extends Component implements IGolemPanel {
     }
 
     @Override
-    public void setBackground(int x, int y, Colorable color) {
+    public void setBackground(int x, int y, Colored color) {
         buffer.setBackground(x, y, color);
     }
 
     @Override
-    public void setForeground(int x, int y, Colorable color) {
+    public void setForeground(int x, int y, Colored color) {
         buffer.setForeground(x, y, color);
     }
 

@@ -1,4 +1,4 @@
-package org.golem.ui;
+package org.golem.terminal;
 
 import lombok.Getter;
 

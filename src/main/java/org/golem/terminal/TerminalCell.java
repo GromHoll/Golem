@@ -1,9 +1,9 @@
-package org.golem.ui;
+package org.golem.terminal;
 
 import lombok.Getter;
-import org.golem.Color;
-import org.golem.Colorable;
-import org.golem.Colors;
+import org.golem.graphics.Color;
+import org.golem.graphics.Colored;
+import org.golem.graphics.Colors;
 
 /**
  * @author GromHoll
@@ -18,27 +18,27 @@ public class TerminalCell extends Changeable {
     private Color foreground = Colors.WHITE.create();
     private Color background = Colors.BLACK.create();
 
-    public Colorable getForeground() {
+    public Colored getForeground() {
         return foreground;
     }
 
-    public Colorable getBackground() {
+    public Colored getBackground() {
         return background;
     }
 
-    public void setCharacter(char character) {
+    void setCharacter(char character) {
         if (this.character == character) { return; }
         this.character = character;
         change();
     }
 
-    public void setForeground(Colorable foreground) {
+    void setForeground(Colored foreground) {
         if (this.foreground.getRGB() == foreground.getRGB()) { return; }
         this.foreground.setRGB(foreground.getRGB());
         change();
     }
 
-    public void setBackground(Colorable background) {
+    void setBackground(Colored background) {
         if (this.background.getRGB() == background.getRGB()) { return; }
         this.background.setRGB(background.getRGB());
         change();

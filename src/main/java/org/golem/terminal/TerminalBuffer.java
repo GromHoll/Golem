@@ -1,6 +1,6 @@
-package org.golem.ui;
+package org.golem.terminal;
 
-import org.golem.Colorable;
+import org.golem.graphics.Colored;
 
 import java.util.Arrays;
 
@@ -39,17 +39,16 @@ public class TerminalBuffer extends Changeable {
         changed |= buffer[x][y].isChanged();
     }
 
-    public void setBackground(int x, int y, Colorable color) {
+    public void setBackground(int x, int y, Colored color) {
         buffer[x][y].setBackground(color);
         changed |= buffer[x][y].isChanged();
     }
 
-    public void setForeground(int x, int y, Colorable color) {
+    public void setForeground(int x, int y, Colored color) {
         buffer[x][y].setForeground(color);
         changed |= buffer[x][y].isChanged();
     }
 
-    // TODO Return readonly interface
     public TerminalCell getCell(int x, int y) {
         return buffer[x][y];
     }

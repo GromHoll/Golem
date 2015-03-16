@@ -1,5 +1,5 @@
-import org.golem.Colors;
-import org.golem.ui.GolemPanel;
+import org.golem.graphics.Colors;
+import org.golem.gui.TerminalPanel;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
 
         JFrame frame = new JFrame();
-        GolemPanel panel = new GolemPanel(10, 10);
+        TerminalPanel panel = new TerminalPanel(10, 10);
         frame.add(panel);
         frame.pack();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
